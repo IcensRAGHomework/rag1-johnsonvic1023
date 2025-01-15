@@ -202,14 +202,18 @@ def generate_hw03(question2, question3):
     )
     # print(holiday_add_result.content)
 
+    holiday_add_bool_result = True
+    if (holiday_add_result.content == "false"):
+        holiday_add_bool_result = False
+
     holiday_add_reason = chain_with_history.invoke(
         {"holiday_list": hw2_results,
-         "question": f"依照之前回答結果{holiday_add_result}，若為true，表示需要加入清單，反之亦然，請用一行說明需新增甚麼節日並解釋原因，並且列出目前甚麼月份已存在的甚麼節日名稱"},
+         "question": f"依照之前回答結果{holiday_add_bool_result}，若為true，表示需要加入清單，反之亦然，請用一行說明需新增甚麼節日並解釋原因，並且列出目前甚麼月份已存在的甚麼節日名稱"},
         config={"configurable": {"session_id": "holiday_questions"}}
     )
     # print(holiday_add_reason.content)
 
-    holiday_result = {"add": f"{holiday_add_result.content}", "reason":f"{holiday_add_reason.content}"}
+    holiday_result = {"add": holiday_add_bool_result, "reason":f"{holiday_add_reason.content}"}
     result = {"Result": holiday_result}
 
     json_output = json.dumps(result, ensure_ascii=False, indent=4)
